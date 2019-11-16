@@ -126,7 +126,6 @@ function config_imgs(yes, no) {
     yes.onclick = () => {
         let time = prompt(QUES);
         let js = collect_json();
-        alert(js);
         post_json(js, time);
     };
 }

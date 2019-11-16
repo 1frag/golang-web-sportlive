@@ -1,3 +1,5 @@
+let gm;
+
 $(document).ready(function () {
 
     let container = document.querySelector('.main');
@@ -30,7 +32,7 @@ function my_join(sep, m, list) {
 }
 
 function make(resp) {
-    let m = redialect(resp.Detail);
+    let m = redialect(resp.Detail); gm = m;
     let prefix = resp.Event.Time + '. ';
     return prefix + my_join(' ', m, {
         'Гол': [';;Кто', 'забил гол, когда на воротах был', ';;Вратарь'],
@@ -41,7 +43,7 @@ function make(resp) {
         'Пенальти': ["Назначено пенальти, бьёт", ";;Кто бьёт",
             "на воротах", ";;Вратарь"],
         'Карточка': [";;Цвет карточки", "карточка получена игроком",
-            "Кому", "по причине:", ";;Причина"],
+            ";;Кому", "по причине:", ";;Причина"],
         'Победа': ["Победила команда", ";;Победившая Команда", "со счетом",
             ";;Счет"],
         'Штрафной бросок': ["Из-за фола игрока", ";;Чей фол",
@@ -53,7 +55,6 @@ function make(resp) {
 function redialect(list) {
     let retval = {};
     for (let i = 0; i < list.length; i++) {
-        alert(list[i].Alias + ' - ' + list[i].Value);
         retval[list[i].Alias] = list[i].Value;
     }
     return retval;

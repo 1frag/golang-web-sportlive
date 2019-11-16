@@ -225,7 +225,7 @@ func HandlerQHistoryEvent(w http.ResponseWriter, r *http.Request) {
 		inner join Item I on HD.item = I.id
 		inner join Detail D on I.detail = D.id
 		where HE.game = %d
-		order by HE.time;`, globals.GetInt64(r, "id"),
+		order by HE.id, HE.time;`, globals.GetInt64(r, "id"),
 	)); err != nil {
 		return
 	} else {
@@ -246,7 +246,7 @@ func HandlerQHistoryEvent(w http.ResponseWriter, r *http.Request) {
 			}
 
 			if lastEventId == event.Id {
-				item := list[0]
+				item := list[len(list) - 1]
 				item.Detail = append(item.Detail, *detail)
 
 			} else {
