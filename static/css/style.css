@@ -1,0 +1,87 @@
+body {
+    background: bisque;
+}
+
+.main {
+    position: absolute;
+    left: 10%;
+}
+
+.history {
+    left: 32%;
+    position: relative;
+    z-index: 1;
+    color: blueviolet;
+}
+
+.basket {
+    top: 400px;
+    left: 55%;
+    z-index: 1;
+    color: yellow;
+}
+
+.football {
+    top: 400px;
+    z-index: 1;
+    color: greenyellow;
+    left: 7%;
+}
+
+.text {
+    position: absolute;
+    font-size: 50px;
+    z-index: 2;
+}
+
+.ururu {
+    left: 20%;
+}
+
+.ytyty {
+    top: 200px;
+    max-width: 400px;
+}
+
+* {
+    margin: 0;
+}
+
+.pic {
+    opacity: 0.34;
+}
+
+.other-img {
+    height: 280px;
+    width: 400px;
+}
+
+.pic:hover {
+    opacity: 0.75;
+}
+
+.football {
+    float: left;
+}
+
+.basket {
+    float: right;
+}
+
+.history-text {
+    left: -100px;
+    top: 20px;
+    max-width: 600px;
+}
+
+.football-text {
+    max-width: 400px;
+    top: 280px;
+    left: 50px;
+}
+
+.basket-text {
+    max-width: 400px;
+    top: 280px;
+    left: 450px;
+}

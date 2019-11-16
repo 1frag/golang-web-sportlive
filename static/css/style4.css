@@ -1,0 +1,42 @@
+body {
+    background: bisque;
+}
+
+.main {
+    position: absolute;
+    left: 20%;
+    right: 20%;
+}
+
+.choose {
+    position: absolute;
+    bottom: 0;
+    top: 330px;
+    left: calc(50% - 200px);
+}
+
+img {
+    border: blueviolet 1px solid;
+}
+
+* {
+    margin: 0;
+}
+
+.item {
+    border: black 1px solid;
+    width: 80%;
+    height: 80px;
+    margin-bottom: 10px;
+    text-align: center;
+    line-height: 40px;
+}
+
+.item:nth-child(2n) {
+    float: left;
+}
+
+
+.item:nth-child(2n+1) {
+    float: right;
+}
