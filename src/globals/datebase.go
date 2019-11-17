@@ -4,7 +4,7 @@ package globals
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/lib/pq"
+	//_ "github.com/lib/pq"
 	"os"
 	"sync"
 )
@@ -38,14 +38,14 @@ func ConnectToDB() (*sql.DB, error) {
 		connStr = os.Getenv("DATABASE_URL")
 	}
 
-	newDb, err := sql.Open("postgres", connStr)
-	if err != nil {
-		return nil, err
-	}
-
-	if newDb != nil {
-		return newDb, nil
-	}
+	//newDb, err := sql.Open("postgres", connStr)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//if newDb != nil {
+	//	return newDb, nil
+	//}
 	return nil, nil
 
 }
