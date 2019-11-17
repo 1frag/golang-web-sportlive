@@ -1,0 +1,10 @@
+{
+  "ImportPath": "go-sportlive",
+  "GoVersion": "go1.12",
+  "Packages": [
+    "./..."
+  ],
+  "Deps": [
+    "github.com/lib/pq"
+  ]
+}
