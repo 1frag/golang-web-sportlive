@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
+	"handlers"
 	"log"
 	"net/http"
-	"web/handlers"
+	"os"
 )
 
 func main() {
 
-	/* для постов */
+	/* изменение состояния игры */
 	http.HandleFunc("/api/", handlers.HandlerApi)
 
 	/* дай страничку */
@@ -38,8 +39,9 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	// Здесь могла бы быть ваша реклама
+	port := os.Getenv("PORT")
 	fmt.Println("Serving webpage at http://0.0.0.0:8000/")
-	err := http.ListenAndServe("0.0.0.0:8000", nil)
+	err := http.ListenAndServe(":" + port, nil)
 
 	if err != nil {
 		log.Fatalf("Failed to listen: %q", err)

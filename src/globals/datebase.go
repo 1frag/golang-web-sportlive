@@ -34,6 +34,10 @@ func ConnectToDB() (*sql.DB, error) {
 		os.Getenv("DB_PORT"),
 	)
 
+	if os.Getenv("DATABASE_URL") != "" {
+		connStr = os.Getenv("DATABASE_URL")
+	}
+
 	newDb, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err

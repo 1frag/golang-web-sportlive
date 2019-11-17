@@ -166,7 +166,7 @@ func HandlerQGames(w http.ResponseWriter, r *http.Request) {
 		Teams    []string
 	}
 
-	rows, _ := DB.Query(fmt.Sprint(`
+	rows, err := DB.Query(fmt.Sprint(`
 		select G.id, G.date, KS.name, array (
 				select T.name from TeamsInGames TG
 				inner join Team T on TG.team = T.id
@@ -176,6 +176,11 @@ func HandlerQGames(w http.ResponseWriter, r *http.Request) {
 		inner join KindSport KS on G.kindSport = KS.id
 		order by G.date;`,
 	))
+
+	if err != nil {
+		log.Printf("err after query: %q", err)
+		return
+	}
 
 	list := make([]*Resp, 0)
 
