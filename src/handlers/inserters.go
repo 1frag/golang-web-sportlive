@@ -3,7 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"globals"
+	"common"
 	"net/http"
 	"strconv"
 	"using_db"
@@ -11,8 +11,8 @@ import (
 
 func HandlerIGame(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
-	t1 := globals.GetInt64(r, "team1")
-	t2 := globals.GetInt64(r, "team2")
+	t1 := common.GetInt64(r, "team1")
+	t2 := common.GetInt64(r, "team2")
 	date := r.FormValue("date")
 
 	res, _ := DB.Query(fmt.Sprintf(`

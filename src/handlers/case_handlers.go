@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"globals"
+	"common"
 	"html/template"
 	"net/http"
 )
@@ -42,7 +42,7 @@ func HandlerG(w http.ResponseWriter, r *http.Request) {
 		Id int64
 	}
 	_ = r.ParseForm()
-	id := globals.GetInt64(r, "id")
+	id := common.GetInt64(r, "id")
 	t, _ := template.ParseFiles("pages/case-g.html")
 	_ = t.Execute(w, Resp{Id: id})
 }

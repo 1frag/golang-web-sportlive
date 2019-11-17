@@ -2,11 +2,11 @@ package using_db
 
 import (
 	"fmt"
-	"globals"
+	"common"
 )
 
-var Db = globals.GetDataBase()
-var StateGame = globals.GetStateGame()
+var Db = common.GetDataBase()
+var StateGame = common.GetStateGame()
 
 func GetIdByKind(kind string) (int, error) {
 	var id int

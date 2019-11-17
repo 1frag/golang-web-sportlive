@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/lib/pq"
-	"globals"
+	"common"
 	"log"
 	"net/http"
 )
@@ -230,7 +230,7 @@ func HandlerQHistoryEvent(w http.ResponseWriter, r *http.Request) {
 		inner join Item I on HD.item = I.id
 		inner join Detail D on I.detail = D.id
 		where HE.game = %d
-		order by HE.id, HE.time;`, globals.GetInt64(r, "id"),
+		order by HE.id, HE.time;`, common.GetInt64(r, "id"),
 	)); err != nil {
 		return
 	} else {

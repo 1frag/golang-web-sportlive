@@ -1,4 +1,4 @@
-package globals
+package common
 
 import (
 	"net/http"

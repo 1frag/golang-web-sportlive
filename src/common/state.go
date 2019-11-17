@@ -1,5 +1,5 @@
 /* Синглетон по голандски */
-package globals
+package common
 
 import (
 	"structs"

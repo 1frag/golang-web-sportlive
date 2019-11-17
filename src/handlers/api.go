@@ -1,13 +1,13 @@
 package handlers
 
 import (
-	"globals"
+	"common"
 	"net/http"
 	"using_db"
 )
 
-var DB = globals.GetDataBase()
-var StateGame = globals.GetStateGame()
+var DB = common.GetDataBase()
+var StateGame = common.GetStateGame()
 
 func HandlerApi(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
@@ -23,11 +23,11 @@ func HandlerApi(w http.ResponseWriter, r *http.Request) {
 		StateGame.GameKindID = 0
 		break
 	case "DateAndTeams":
-		StateGame.Team1 = globals.GetInt64(r, "team1")
-		StateGame.Team2 = globals.GetInt64(r, "team2")
+		StateGame.Team1 = common.GetInt64(r, "team1")
+		StateGame.Team2 = common.GetInt64(r, "team2")
 		break
 	case "ChangeEvent":
-		StateGame.CurEvent = globals.GetInt64(r, "event")
+		StateGame.CurEvent = common.GetInt64(r, "event")
 		break
 	}
 	_, _ = w.Write([]byte("OK"))
