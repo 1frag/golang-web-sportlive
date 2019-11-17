@@ -4,6 +4,7 @@ package globals
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/lib/pq"
 	"log"
 
 	"os"
@@ -41,14 +42,14 @@ func ConnectToDB() (*sql.DB, error) {
 
 	log.Print(connStr)
 
-	//newDb, err := sql.Open("postgres", connStr)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//
-	//if newDb != nil {
-	//	return newDb, nil
-	//}
+	newDb, err := sql.Open("postgres", connStr)
+	if err != nil {
+		return nil, err
+	}
+
+	if newDb != nil {
+		return newDb, nil
+	}
 	return nil, nil
 
 }
