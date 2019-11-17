@@ -4,3 +4,6 @@
 [submodule "github.com/lib/pq"]
 	path = github.com/lib/pq
 	url = https://github.com/lib/pq
+[submodule "src/github.com/constabulary/gb"]
+	path = src/github.com/constabulary/gb
+	url = https://github.com/constabulary/gb
