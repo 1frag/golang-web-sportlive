@@ -1,0 +1,6 @@
+[submodule "src/github.com/lib/pq"]
+	path = src/github.com/lib/pq
+	url = https://github.com/lib/pq
+[submodule "github.com/lib/pq"]
+	path = github.com/lib/pq
+	url = https://github.com/lib/pq
