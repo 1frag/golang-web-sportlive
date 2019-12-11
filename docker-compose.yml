@@ -8,7 +8,6 @@ services:
         MODE: dev
     volumes:
       - ./src/:/go/src/
-      - ./github.com/:/go/src/github.com/
       - ./static/:/go/src/static/
       - ./pages/:/go/src/pages/
       - ./start.sh:/go/src/start.sh

@@ -15,7 +15,7 @@ func GetIdByKind(kind string) (int, error) {
 					where name='%s'
 					limit 1;`, kind)
 
-	rows, err := Db.Query(query)
+	rows, err := Db.Raw(query, "jinzhu").Rows()
 
 	if err != nil {
 		return -1, err
@@ -39,7 +39,7 @@ func AddHistoryEvent(time string) int64 {
 			returning id;`,
 		StateGame.GameID, StateGame.CurEvent, time,
 	)
-	rows, _ := Db.Query(query)
+	rows, _ := Db.Raw(query, "jinzhu").Rows()
 	rows.Next()
 	_ = rows.Scan(&id)
 	return id
@@ -53,7 +53,7 @@ func InsertHistoryDetail(eventId int64, itemId int64, value string) {
 		returning id;`,
 		eventId, itemId, value,
 	)
-	res, err := Db.Query(query)
+	res, err := Db.Raw(query, "jinzhu").Rows()
 	if err != nil {
 		fmt.Printf("err: %q", err)
 	} else {

@@ -17,12 +17,6 @@ type RespPost struct {
 	Result int
 }
 
-type Detail struct {
-	Id    int
-	Type  string
-	Alias string
-}
-
 type State struct {
 	GameID     int64
 	GameName   string

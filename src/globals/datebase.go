@@ -2,17 +2,18 @@
 package globals
 
 import (
-	"database/sql"
 	"fmt"
+	_ "github.com/jackc/pgx"
+	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 	"os"
 	"sync"
 )
 
-var instanceDataBase *sql.DB
+var instanceDataBase *gorm.DB
 var onceDataBase sync.Once
 
-func GetDataBase() *sql.DB {
+func GetDataBase() *gorm.DB {
 	onceDataBase.Do(func() {
 		var err error
 		instanceDataBase, err = ConnectToDB()
@@ -23,18 +24,18 @@ func GetDataBase() *sql.DB {
 	return instanceDataBase
 }
 
-func ConnectToDB() (*sql.DB, error) {
+func ConnectToDB() (*gorm.DB, error) {
 
-	var connStr = fmt.Sprintf(
-		`user=%s password=%s dbname=%s host=%s port=%s sslmode=disable`,
+	var uri = fmt.Sprintf(
+		`postgresql://%s:%s@%s:%s/%s`,
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_PORT"),
+		os.Getenv("DB_NAME"),
 	)
 
-	newDb, err := sql.Open("postgres", connStr)
+	newDb, err := gorm.Open("postgres", uri)
 	if err != nil {
 		return nil, err
 	}
