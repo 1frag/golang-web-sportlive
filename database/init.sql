@@ -7,9 +7,6 @@ create table detail
     type  text
 );
 
-alter table detail
-    owner to postgres;
-
 INSERT INTO public.detail (id, alias, type) VALUES (11, 'Победившая Команда', '[''TEAM'', ]');
 INSERT INTO public.detail (id, alias, type) VALUES (5, 'Цвет карточки', '[''ENUM'', [''Желтая'', ''Красная'']]');
 INSERT INTO public.detail (id, alias, type) VALUES (6, 'Причина', '[''STR'', ]');

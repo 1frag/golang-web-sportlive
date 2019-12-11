@@ -12,4 +12,5 @@ require (
 	golang.org/x/net v0.0.0-20150629084131-d9558e5c97f8 // indirect
 	gopkg.in/bluesuncorp/validator.v5 v5.9.1 // indirect
 	github.com/lib/pq v1.2.0
+	github.com/jinzhu/gorm
 )

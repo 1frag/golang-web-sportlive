@@ -1,11 +1,16 @@
-let OK = "OK";
+let OK = "OK", last_resp = null;
 
 jQuery.DoQuery = function(method) {
     return function (url, args, callback) {
         $.ajax({
             url: url, data: $.param(args), dataType: "text", type: method,
             success: function (response) {
-                response = eval('(' + response + ')');
+                last_resp = response;
+                try {
+                    response = eval('(' + response + ')');
+                } catch (e) {
+                    console.log('При парсинге: ' + e);
+                }
                 if (callback) callback(response);
             }, error: function (response) {
                 console.log("ERROR:", response);

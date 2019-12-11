@@ -20,6 +20,7 @@ func main() {
 	http.HandleFunc("/D/", handlers.HandlerD)
 	http.HandleFunc("/H/", handlers.HandlerH)
 	http.HandleFunc("/G/", handlers.HandlerG)
+	http.HandleFunc("/J/", handlers.HandlerJ)
 
 	/* селекты к базе */
 	http.HandleFunc("/queries/teams/", handlers.HandlerQTeams)
@@ -33,6 +34,7 @@ func main() {
 	/* инсерты в базу */
 	http.HandleFunc("/insert/game/", handlers.HandlerIGame)
 	http.HandleFunc("/insert/events/", handlers.HandlerIEvent)
+	http.HandleFunc("/insert/team/", handlers.HandlerITeam)
 
 	/* статика */
 	fs := http.FileServer(http.Dir("static"))

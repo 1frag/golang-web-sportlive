@@ -2,18 +2,17 @@
 package common
 
 import (
-	"database/sql"
-	"fmt"
-	_ "github.com/lib/pq"
-	"log"
+	//"fmt"
+	"github.com/go-pg/pg"
+	//"log"
 	"os"
 	"sync"
 )
 
-var instanceDataBase *sql.DB
+var instanceDataBase *pg.DB
 var onceDataBase sync.Once
 
-func GetDataBase() *sql.DB {
+func GetDataBase() *pg.DB {
 	onceDataBase.Do(func() {
 		var err error
 		instanceDataBase, err = ConnectToDB()
@@ -24,27 +23,29 @@ func GetDataBase() *sql.DB {
 	return instanceDataBase
 }
 
-func ConnectToDB() (*sql.DB, error) {
+func ConnectToDB() (*pg.DB, error) {
 
-	var connStr = fmt.Sprintf(
-		`user=%s password=%s dbname=%s host=%s port=%s sslmode=disable`,
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-	)
+	//var connStr = fmt.Sprintf(
+	//	`postgres://%s:%s@%s:%s/%s`,
+	//	os.Getenv("DB_USER"),
+	//	os.Getenv("DB_PASSWORD"),
+	//	os.Getenv("DB_HOST"),
+	//	os.Getenv("DB_PORT"),
+	//	os.Getenv("DB_NAME"),
+	//)
+	//
+	//if os.Getenv("DATABASE_URL") != "" {
+	//	connStr = os.Getenv("DATABASE_URL")
+	//}
 
-	if os.Getenv("DATABASE_URL") != "" {
-		connStr = os.Getenv("DATABASE_URL")
-	}
+	//log.Print(connStr)
 
-	log.Print(connStr)
-
-	newDb, err := sql.Open("postgres", connStr)
-	if err != nil {
-		return nil, err
-	}
+	newDb := pg.Connect(&pg.Options{
+		Addr:     os.Getenv("DB_HOST") + ":" + os.Getenv("DB_PORT"),
+		User:     os.Getenv("DB_USER"),
+		Password: os.Getenv("DB_PASSWORD"),
+		Database: os.Getenv("DB_NAME"),
+	})
 
 	if newDb != nil {
 		return newDb, nil

@@ -46,3 +46,9 @@ func HandlerG(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("pages/case-g.html")
 	_ = t.Execute(w, Resp{Id: id})
 }
+
+func HandlerJ(w http.ResponseWriter, r *http.Request) {
+	// Страничка просмотра событий игры
+	t, _ := template.ParseFiles("pages/case-j.html")
+	_ = t.Execute(w, nil)
+}
