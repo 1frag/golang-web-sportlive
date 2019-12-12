@@ -15,20 +15,20 @@ func HandlerIGame(w http.ResponseWriter, r *http.Request) {
 	t2 := globals.GetInt64(r, "team2")
 	date := r.FormValue("date")
 
-	res, _ := DB.Query(fmt.Sprintf(`
+	res, _ := DB.Raw(fmt.Sprintf(`
 		insert into Game (date, kindSport)
 		values ('%s', %d)
 		returning id;`,
 		date, StateGame.GameKindID),
-	)
+	).Rows()
 	res.Next()
 	_ = res.Scan(&StateGame.GameID)
 
-	_, _ = DB.Query(fmt.Sprintf(`
+	_, _ = DB.Raw(fmt.Sprintf(`
 		insert into TeamsInGames (game, team)
 		values (%d, %d), (%d, %d);`,
 		StateGame.GameID, t1, StateGame.GameID, t2),
-	)
+	).Rows()
 
 	_, _ = w.Write([]byte("OK"))
 

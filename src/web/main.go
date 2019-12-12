@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	/* для постов */
+	/* обращение к состоянию */
 	http.HandleFunc("/api/", handlers.HandlerApi)
 
 	/* дай страничку */
@@ -19,6 +19,7 @@ func main() {
 	http.HandleFunc("/D/", handlers.HandlerD)
 	http.HandleFunc("/H/", handlers.HandlerH)
 	http.HandleFunc("/G/", handlers.HandlerG)
+	http.HandleFunc("/L/", handlers.HandlerL)
 
 	/* селекты к базе */
 	http.HandleFunc("/queries/teams/", handlers.HandlerQTeams)
@@ -36,6 +37,10 @@ func main() {
 	/* статика */
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	/* бизнесс логика */
+	http.HandleFunc("/app/login/", handlers.LoginMeHandler)
+	http.HandleFunc("/app/row_sql/", handlers.HandlerRowSql)
 
 	// Здесь могла бы быть ваша реклама
 	fmt.Println("Serving webpage at http://0.0.0.0:8000/")

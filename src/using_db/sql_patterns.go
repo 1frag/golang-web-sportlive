@@ -3,6 +3,7 @@ package using_db
 import (
 	"fmt"
 	"globals"
+	"log"
 )
 
 var Db = globals.GetDataBase()
@@ -15,9 +16,11 @@ func GetIdByKind(kind string) (int, error) {
 					where name='%s'
 					limit 1;`, kind)
 
-	rows, err := Db.Raw(query, "jinzhu").Rows()
+	log.Print(kind)
+	rows, err := Db.Raw(query).Rows()
 
 	if err != nil {
+		log.Print(err)
 		return -1, err
 	} else {
 		rows.Next()
@@ -39,7 +42,7 @@ func AddHistoryEvent(time string) int64 {
 			returning id;`,
 		StateGame.GameID, StateGame.CurEvent, time,
 	)
-	rows, _ := Db.Raw(query, "jinzhu").Rows()
+	rows, _ := Db.Raw(query).Rows()
 	rows.Next()
 	_ = rows.Scan(&id)
 	return id
@@ -53,7 +56,7 @@ func InsertHistoryDetail(eventId int64, itemId int64, value string) {
 		returning id;`,
 		eventId, itemId, value,
 	)
-	res, err := Db.Raw(query, "jinzhu").Rows()
+	res, err := Db.Raw(query).Rows()
 	if err != nil {
 		fmt.Printf("err: %q", err)
 	} else {

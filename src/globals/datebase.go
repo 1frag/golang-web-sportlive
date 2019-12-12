@@ -6,6 +6,7 @@ import (
 	_ "github.com/jackc/pgx"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
+	"log"
 	"os"
 	"sync"
 )
@@ -27,7 +28,7 @@ func GetDataBase() *gorm.DB {
 func ConnectToDB() (*gorm.DB, error) {
 
 	var uri = fmt.Sprintf(
-		`postgresql://%s:%s@%s:%s/%s`,
+		`postgresql://%s:%s@%s:%s/%s?sslmode=disable`,
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_HOST"),
@@ -37,7 +38,7 @@ func ConnectToDB() (*gorm.DB, error) {
 
 	newDb, err := gorm.Open("postgres", uri)
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
 
 	if newDb != nil {

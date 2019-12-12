@@ -46,3 +46,9 @@ func HandlerG(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("pages/case-g.html")
 	_ = t.Execute(w, Resp{Id: id})
 }
+
+func HandlerL(w http.ResponseWriter, r *http.Request) {
+	// Страничка регистрации
+	t, _ := template.ParseFiles("pages/case-l.html")
+	_ = t.Execute(w, nil)
+}

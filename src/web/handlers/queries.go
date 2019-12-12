@@ -8,6 +8,7 @@ import (
 	"globals"
 	"log"
 	"net/http"
+	"structs"
 )
 
 func HandlerQTeams(w http.ResponseWriter, r *http.Request) {
@@ -16,16 +17,17 @@ func HandlerQTeams(w http.ResponseWriter, r *http.Request) {
 		Name string
 	}
 
-	rows, _ := DB.Query(fmt.Sprintf(`
-		select Team.id, Team.name
-		from Team
-		where Team.kindSport = %d;`,
-		StateGame.GameKindID),
-	)
+	rows, err := DB.Model(&structs.Team{}).
+		Where("Team.kindSport = ?", StateGame.GameKindID).
+		Select("id, name").Rows()
+
+	log.Print(StateGame.GameKindID, rows, err)
+
 	list := make([]*Resp, 0)
 
 	if rows != nil {
 		for rows.Next() {
+			log.Print('q')
 			r := new(Resp)
 			_ = rows.Scan(&r.Id, &r.Name)
 			list = append(list, r)
@@ -42,12 +44,10 @@ func HandlerQEvents(w http.ResponseWriter, r *http.Request) {
 		Name string
 	}
 
-	rows, _ := DB.Query(fmt.Sprintf(`
-		select Event.id, Event.name
-		from Event
-		where Event.kindSport = %d;`,
-		StateGame.GameKindID),
-	)
+	rows, _ := DB.Model(&structs.Event{}).
+		Where("kindSport = ?", StateGame.GameKindID).
+		Select("id, name").Rows()
+
 	list := make([]*Resp, 0)
 
 	if rows != nil {
@@ -69,13 +69,12 @@ func HandlerQItems(w http.ResponseWriter, r *http.Request) {
 		Type  string
 	}
 
-	rows, _ := DB.Query(fmt.Sprintf(`
-		select I.id, D.alias, D.type
-		from Item I
-		inner join Detail D on I.detail = D.id
-		where I.event = %d;`,
-		StateGame.CurEvent),
-	)
+	rows, _ := DB.Model(&structs.Item{}).
+		Table("Item I").
+		Joins("inner join Detail D on I.detail = D.id").
+		Where("I.event = ?", StateGame.CurEvent).
+		Select("I.id, D.alias, D.type").Rows()
+
 	list := make([]*Resp, 0)
 
 	if rows != nil {
@@ -97,12 +96,13 @@ func HandlerQPerson(w http.ResponseWriter, r *http.Request) {
 		Team int64
 	}
 
-	rows, _ := DB.Query(fmt.Sprintf(`
-		select P.id, P.name, P.team
-		from Participant P
-		where P.team = %d or P.team = %d;`,
-		StateGame.Team1, StateGame.Team2),
-	)
+	rows, _ := DB.Model(&structs.Participant{}).
+		Table("Participant P").
+		Where("P.team = ? or P.team = ?",
+			StateGame.Team1,
+			StateGame.Team2).
+		Select("P.id, P.name, P.team").
+		Rows()
 
 	list := make([]*Resp, 0)
 
@@ -124,12 +124,13 @@ func HandlerQCurTeams(w http.ResponseWriter, r *http.Request) {
 		Team2 string
 	}
 
-	rows, _ := DB.Query(fmt.Sprintf(`
-		select T.id, T.name
-		from Team T
-		where T.id = %d or T.id = %d;`,
-		StateGame.Team1, StateGame.Team2,
-	))
+	rows, _ := DB.Model(&structs.Team{}).
+		Table("Team T").
+		Where("T.id = ? or T.id = ?",
+			StateGame.Team1,
+			StateGame.Team2).
+		Select("id, name").
+		Rows()
 
 	var t1n string
 	var t2n string
@@ -138,7 +139,8 @@ func HandlerQCurTeams(w http.ResponseWriter, r *http.Request) {
 	var js []byte
 
 	rows.Next()
-	_ = rows.Scan(&t1i, &t1n)
+	err := rows.Scan(&t1i, &t1n)
+	log.Print(err)
 
 	rows.Next()
 	_ = rows.Scan(&t2i, &t2n)
@@ -166,7 +168,7 @@ func HandlerQGames(w http.ResponseWriter, r *http.Request) {
 		Teams    []string
 	}
 
-	rows, _ := DB.Query(fmt.Sprint(`
+	rows, _ := DB.Raw(fmt.Sprint(`
 		select G.id, G.date, KS.name, array (
 				select T.name from TeamsInGames TG
 				inner join Team T on TG.team = T.id
@@ -175,7 +177,7 @@ func HandlerQGames(w http.ResponseWriter, r *http.Request) {
 		from Game G
 		inner join KindSport KS on G.kindSport = KS.id
 		order by G.date;`,
-	))
+	)).Rows()
 
 	list := make([]*Resp, 0)
 
@@ -216,17 +218,17 @@ func HandlerQHistoryEvent(w http.ResponseWriter, r *http.Request) {
 
 	_ = r.ParseForm()
 
-	if rows, err := DB.Query(fmt.Sprintf(`
-		select HE.id as EventID, HE.time as EventTime, E.name as EventName,
-			   D.type as DetailType, HD.value as Value, D.alias as DetailAlias
-		from historydetail HD
-		inner join historyevent HE on HD.historyEvent = HE.id
-		inner join Event E on HE.event = E.id
-		inner join Item I on HD.item = I.id
-		inner join Detail D on I.detail = D.id
-		where HE.game = %d
-		order by HE.id, HE.time;`, globals.GetInt64(r, "id"),
-	)); err != nil {
+	if rows, err := DB.Model(&structs.Historydetail{}).
+		Table("historydetail HD").
+		Joins("inner join historyevent HE on HD.historyEvent = HE.id").
+		Joins("inner join Event E on HE.event = E.id").
+		Joins("inner join Item I on HD.item = I.id").
+		Joins("inner join Detail D on I.detail = D.id").
+		Where("HE.game = ?", globals.GetInt64(r, "id")).
+		Select("HE.id as EventID, HE.time as EventTime, E.name as EventName, " +
+			"D.type as DetailType, HD.value as Value, D.alias as DetailAlias").
+		Order("HE.id, HE.time").Rows(); err != nil {
+		log.Print(err)
 		return
 	} else {
 
@@ -246,7 +248,7 @@ func HandlerQHistoryEvent(w http.ResponseWriter, r *http.Request) {
 			}
 
 			if lastEventId == event.Id {
-				item := list[len(list) - 1]
+				item := list[len(list)-1]
 				item.Detail = append(item.Detail, *detail)
 
 			} else {
